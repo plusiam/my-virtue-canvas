@@ -1,73 +1,103 @@
-# Welcome to your Lovable project
+# 나만의 미덕 카드 (My Virtue Canvas)
 
-## Project info
+나와 친구의 좋은 점을 발견하고 아름다운 카드로 만드는 웹 애플리케이션입니다.
 
-**URL**: https://lovable.dev/projects/427e9492-4be1-43fc-8f97-b051c38e44e5
+## ✨ 주요 기능
 
-## How can I edit this code?
+- **카드 만들기**: 자신의 미덕을 발견하고 실천한 행동을 기록
+- **친구의 칭찬**: 친구가 발견해준 미덕을 기록하고 감사 표현
+- **미덕벽 보기**: 생성된 모든 카드를 갤러리 형태로 확인
+- **카드 꾸미기**: 다양한 배경색과 패턴으로 나만의 카드 디자인
+- **PDF 내보내기**: 카드를 PDF로 저장하여 인쇄 가능
 
-There are several ways of editing your application.
+## 🛠️ 기술 스택
 
-**Use Lovable**
+- **Frontend**: React 18 + TypeScript
+- **Build Tool**: Vite
+- **UI Library**: shadcn/ui (Radix UI 기반)
+- **Styling**: Tailwind CSS
+- **State Management**: TanStack Query
+- **Routing**: React Router v6
+- **Form Management**: React Hook Form + Zod
+- **PDF Generation**: jsPDF + html2canvas
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/427e9492-4be1-43fc-8f97-b051c38e44e5) and start prompting.
+## 🚀 시작하기
 
-Changes made via Lovable will be committed automatically to this repo.
+### 필수 요구사항
 
-**Use your preferred IDE**
+- Node.js 18 이상
+- npm 또는 yarn
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 설치 및 실행
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+# 저장소 클론
+git clone https://github.com/plusiam/my-virtue-canvas.git
+cd my-virtue-canvas
 
-Follow these steps:
+# 의존성 설치
+npm install
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 개발 서버 실행
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+개발 서버가 시작되면 브라우저에서 `http://localhost:8080`으로 접속할 수 있습니다.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📦 빌드
 
-**Use GitHub Codespaces**
+```bash
+# 프로덕션 빌드
+npm run build
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# 빌드 결과 미리보기
+npm run preview
+```
 
-## What technologies are used for this project?
+빌드된 파일은 `dist` 폴더에 생성됩니다.
 
-This project is built with:
+## 🎨 프로젝트 구조
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```
+my-virtue-canvas/
+├── src/
+│   ├── components/         # React 컴포넌트
+│   │   ├── CardEditor.tsx  # 카드 생성 에디터
+│   │   ├── VirtueCard.tsx  # 미덕 카드 컴포넌트
+│   │   ├── VirtueWall.tsx  # 카드 갤러리
+│   │   └── ui/            # shadcn UI 컴포넌트들
+│   ├── pages/             # 페이지 컴포넌트
+│   ├── hooks/             # 커스텀 훅
+│   ├── lib/               # 유틸리티 함수
+│   └── assets/            # 정적 리소스
+├── public/                # 공개 정적 파일
+└── ...
+```
 
-## How can I deploy this project?
+## 📝 스크립트
 
-Simply open [Lovable](https://lovable.dev/projects/427e9492-4be1-43fc-8f97-b051c38e44e5) and click on Share -> Publish.
+- `npm run dev` - 개발 서버 실행
+- `npm run build` - 프로덕션 빌드
+- `npm run build:dev` - 개발 모드 빌드
+- `npm run lint` - ESLint 실행
+- `npm run preview` - 빌드 결과 미리보기
 
-## Can I connect a custom domain to my Lovable project?
+## 🎓 교육 활용
 
-Yes, you can!
+이 프로젝트는 교육 현장에서 다음과 같이 활용할 수 있습니다:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- **인성 교육**: 학생들이 자신과 친구의 긍정적인 면을 발견하고 표현
+- **시각화 도구**: 미덕을 아름다운 카드로 시각화하여 동기부여
+- **포트폴리오**: 학생들의 성장 과정을 기록하고 공유
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## 🤝 기여
+
+프로젝트 개선을 위한 제안이나 버그 리포트는 언제나 환영합니다!
+
+## 📄 라이선스
+
+MIT License
+
+## 💝 감사의 말
+
+서로의 미덕을 발견하고 칭찬하며 함께 성장해요!
