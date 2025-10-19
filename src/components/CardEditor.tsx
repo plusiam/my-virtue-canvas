@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -34,6 +35,9 @@ const PATTERN_OPTIONS = [
 ];
 
 export const CardEditor = ({ onSave }: CardEditorProps) => {
+  const [grade, setGrade] = useState("");
+  const [className, setClassName] = useState("");
+  const [studentName, setStudentName] = useState("");
   const [frontVirtue, setFrontVirtue] = useState("");
   const [frontAction, setFrontAction] = useState("");
   const [backVirtue, setBackVirtue] = useState("");
@@ -42,6 +46,11 @@ export const CardEditor = ({ onSave }: CardEditorProps) => {
   const [pattern, setPattern] = useState(PATTERN_OPTIONS[0].value);
 
   const handleSave = () => {
+    if (!grade || !className || !studentName) {
+      alert("학년, 반, 이름을 입력해주세요!");
+      return;
+    }
+
     if (!frontVirtue || !frontAction) {
       alert("나의 미덕과 실천한 행동을 입력해주세요!");
       return;
@@ -49,6 +58,9 @@ export const CardEditor = ({ onSave }: CardEditorProps) => {
 
     const newCard: VirtueCardData = {
       id: Date.now().toString(),
+      grade,
+      className,
+      studentName,
       frontVirtue,
       frontAction,
       backVirtue,
@@ -59,7 +71,7 @@ export const CardEditor = ({ onSave }: CardEditorProps) => {
 
     onSave(newCard);
 
-    // 폼 초기화
+    // 폼 초기화 (학년/반/이름은 유지)
     setFrontVirtue("");
     setFrontAction("");
     setBackVirtue("");
@@ -72,6 +84,53 @@ export const CardEditor = ({ onSave }: CardEditorProps) => {
         <div className="flex items-center gap-2 mb-4">
           <Plus className="w-5 h-5 text-primary" />
           <h2 className="text-2xl font-bold text-foreground">나만의 미덕 카드 만들기</h2>
+        </div>
+
+        {/* 학생 정보 */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="space-y-2">
+            <Label htmlFor="grade">학년</Label>
+            <Select value={grade} onValueChange={setGrade}>
+              <SelectTrigger id="grade">
+                <SelectValue placeholder="학년" />
+              </SelectTrigger>
+              <SelectContent>
+                {["1학년", "2학년", "3학년", "4학년", "5학년", "6학년"].map((g) => (
+                  <SelectItem key={g} value={g}>
+                    {g}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="class">반</Label>
+            <Select value={className} onValueChange={setClassName}>
+              <SelectTrigger id="class">
+                <SelectValue placeholder="반" />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: 10 }, (_, i) => `${i + 1}반`).map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="studentName">이름</Label>
+            <Textarea
+              id="studentName"
+              placeholder="이름"
+              value={studentName}
+              onChange={(e) => setStudentName(e.target.value)}
+              rows={1}
+              className="resize-none"
+            />
+          </div>
         </div>
 
         {/* 앞면 정보 */}
