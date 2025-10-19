@@ -90,45 +90,31 @@ export const CardEditor = ({ onSave }: CardEditorProps) => {
         <div className="grid grid-cols-3 gap-3">
           <div className="space-y-2">
             <Label htmlFor="grade">학년</Label>
-            <Select value={grade} onValueChange={setGrade}>
-              <SelectTrigger id="grade">
-                <SelectValue placeholder="학년" />
-              </SelectTrigger>
-              <SelectContent>
-                {["1학년", "2학년", "3학년", "4학년", "5학년", "6학년"].map((g) => (
-                  <SelectItem key={g} value={g}>
-                    {g}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Input
+              id="grade"
+              placeholder="예: 3학년"
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="class">반</Label>
-            <Select value={className} onValueChange={setClassName}>
-              <SelectTrigger id="class">
-                <SelectValue placeholder="반" />
-              </SelectTrigger>
-              <SelectContent>
-                {Array.from({ length: 10 }, (_, i) => `${i + 1}반`).map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Input
+              id="class"
+              placeholder="예: 1반"
+              value={className}
+              onChange={(e) => setClassName(e.target.value)}
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="studentName">이름</Label>
-            <Textarea
+            <Input
               id="studentName"
-              placeholder="이름"
+              placeholder="예: 홍길동"
               value={studentName}
               onChange={(e) => setStudentName(e.target.value)}
-              rows={1}
-              className="resize-none"
             />
           </div>
         </div>
