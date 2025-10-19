@@ -14,6 +14,22 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="나만의 미덕 카드" />
     <meta name="twitter:description" content="나와 친구의 좋은 점을 발견하고 아름다운 카드로 만들어보세요" />
+    
+    <!-- GitHub Pages SPA fallback -->
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafgraph/spa-github-pages
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
   </head>
 
   <body>
