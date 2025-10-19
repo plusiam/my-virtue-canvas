@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Download, RotateCcw, Sparkles } from "lucide-react";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Download, RotateCcw, Sparkles, FileImage, FileText } from "lucide-react";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+import { toast } from "@/hooks/use-toast";
 
 interface VirtueCardProps {
   id: string;
@@ -45,15 +54,105 @@ export const VirtueCard = ({
   onUpdate,
 }: VirtueCardProps) => {
   const [isFlipped, setIsFlipped] = useState(false);
+  const frontCardRef = useRef<HTMLDivElement>(null);
+  const backCardRef = useRef<HTMLDivElement>(null);
 
   const cardStyle = {
     backgroundColor,
     backgroundImage: pattern !== "none" ? pattern : undefined,
   };
 
-  const handleDownload = () => {
-    // 카드 다운로드 기능 구현
-    console.log("카드 다운로드");
+  const downloadAsImage = async (side: "front" | "back") => {
+    const cardElement = side === "front" ? frontCardRef.current : backCardRef.current;
+    if (!cardElement) return;
+
+    try {
+      const canvas = await html2canvas(cardElement, {
+        backgroundColor: null,
+        scale: 2,
+        logging: false,
+      });
+
+      const link = document.createElement("a");
+      const fileName = `미덕카드_${studentName || "카드"}_${side === "front" ? "앞면" : "뒷면"}.png`;
+      link.download = fileName;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+
+      toast({
+        title: "다운로드 완료",
+        description: `${fileName}이(가) 다운로드되었습니다.`,
+      });
+    } catch (error) {
+      toast({
+        title: "다운로드 실패",
+        description: "이미지 다운로드 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const downloadAsPDF = async () => {
+    try {
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4",
+      });
+
+      // 앞면 캡처
+      if (frontCardRef.current) {
+        const frontCanvas = await html2canvas(frontCardRef.current, {
+          backgroundColor: null,
+          scale: 2,
+          logging: false,
+        });
+        const frontImgData = frontCanvas.toDataURL("image/png");
+        const imgWidth = 150;
+        const imgHeight = (frontCanvas.height * imgWidth) / frontCanvas.width;
+        const x = (210 - imgWidth) / 2;
+        const y = 20;
+
+        pdf.addPage();
+        pdf.text("앞면", 105, 15, { align: "center" });
+        pdf.addImage(frontImgData, "PNG", x, y, imgWidth, imgHeight);
+      }
+
+      // 뒷면 캡처
+      if (backCardRef.current) {
+        const backCanvas = await html2canvas(backCardRef.current, {
+          backgroundColor: null,
+          scale: 2,
+          logging: false,
+        });
+        const backImgData = backCanvas.toDataURL("image/png");
+        const imgWidth = 150;
+        const imgHeight = (backCanvas.height * imgWidth) / backCanvas.width;
+        const x = (210 - imgWidth) / 2;
+        const y = 20;
+
+        pdf.addPage();
+        pdf.text("뒷면", 105, 15, { align: "center" });
+        pdf.addImage(backImgData, "PNG", x, y, imgWidth, imgHeight);
+      }
+
+      // 첫 페이지 삭제 (빈 페이지)
+      pdf.deletePage(1);
+
+      const fileName = `미덕카드_${studentName || "카드"}.pdf`;
+      pdf.save(fileName);
+
+      toast({
+        title: "다운로드 완료",
+        description: `${fileName}이(가) 다운로드되었습니다.`,
+      });
+    } catch (error) {
+      toast({
+        title: "다운로드 실패",
+        description: "PDF 다운로드 중 오류가 발생했습니다.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -66,6 +165,7 @@ export const VirtueCard = ({
       >
         {/* 앞면 */}
         <Card
+          ref={frontCardRef}
           className={`absolute w-full h-80 p-6 shadow-card hover:shadow-hover transition-all duration-300 backface-hidden ${
             isFlipped ? "invisible" : ""
           }`}
@@ -93,6 +193,7 @@ export const VirtueCard = ({
 
         {/* 뒷면 */}
         <Card
+          ref={backCardRef}
           className={`absolute w-full h-80 p-6 shadow-card hover:shadow-hover transition-all duration-300 backface-hidden rotate-y-180 ${
             !isFlipped ? "invisible" : ""
           }`}
@@ -131,10 +232,29 @@ export const VirtueCard = ({
           <RotateCcw className="w-4 h-4" />
           뒤집기
         </Button>
-        <Button variant="outline" size="sm" onClick={handleDownload} className="gap-2">
-          <Download className="w-4 h-4" />
-          저장
-        </Button>
+        
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="gap-2">
+              <Download className="w-4 h-4" />
+              다운로드
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="z-50 bg-popover">
+            <DropdownMenuItem onClick={() => downloadAsImage("front")} className="gap-2 cursor-pointer">
+              <FileImage className="w-4 h-4" />
+              앞면 이미지로 저장
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => downloadAsImage("back")} className="gap-2 cursor-pointer">
+              <FileImage className="w-4 h-4" />
+              뒷면 이미지로 저장
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={downloadAsPDF} className="gap-2 cursor-pointer">
+              <FileText className="w-4 h-4" />
+              PDF로 저장 (앞뒷면)
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <style>{`
